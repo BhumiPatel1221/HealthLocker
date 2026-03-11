@@ -157,7 +157,7 @@ export function AuthPage() {
               </div>
               <h1
                 className="font-serif"
-                style={{ fontSize: '32px', lineHeight: 1.15, letterSpacing: '-0.02em', fontWeight: 700, color: 'var(--color-text)', marginBottom: '12px' }}
+                style={{ fontSize: 'clamp(24px, 5vw, 32px)', lineHeight: 1.15, letterSpacing: '-0.02em', fontWeight: 700, color: 'var(--color-text)', marginBottom: '12px' }}
               >
                 Check Your Inbox
               </h1>
@@ -215,7 +215,7 @@ export function AuthPage() {
             <h1
               className="font-serif"
               style={{
-                fontSize: '44px',
+                fontSize: 'clamp(28px, 5vw, 44px)',
                 lineHeight: 1.1,
                 letterSpacing: '-0.02em',
                 fontWeight: 700,

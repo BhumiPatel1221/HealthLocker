@@ -189,14 +189,14 @@ export function Vault() {
 
    // ── Render ───────────────────────────────────
    return (
-      <div className="min-h-screen bg-bg pt-16 flex" onClick={() => setOpenMenuId(null)}>
+      <div className="min-h-screen bg-bg pt-16 pb-20 md:pb-0 flex" onClick={() => setOpenMenuId(null)}>
          <Sidebar />
-         <main className="flex-1 ml-16 animate-entrance" style={{ padding: '40px 48px' }}>
+         <main className="flex-1 ml-0 md:ml-16 animate-entrance" style={{ padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 48px)' }}>
 
             {/* ── HEADER ── */}
             <header
                className="flex flex-col md:flex-row md:items-center md:justify-between"
-               style={{ marginBottom: '40px', gap: 16 }}
+               style={{ marginBottom: 'clamp(24px, 4vw, 40px)', gap: 16 }}
             >
                <div className="flex flex-col" style={{ gap: '4px' }}>
                   {/* Breadcrumb */}
@@ -227,7 +227,7 @@ export function Vault() {
                         </span>
                      ))}
                   </div>
-                  <h1 className="font-serif text-text" style={{ fontSize: '30px' }}>
+                  <h1 className="font-serif text-text" style={{ fontSize: 'clamp(22px, 4vw, 30px)' }}>
                      {activeFolderObj ? activeFolderObj.name : 'Medical Vault'}
                   </h1>
                   <p className="uppercase font-semibold mono text-text-muted tracking-widest" style={{ fontSize: '12px' }}>
@@ -236,22 +236,22 @@ export function Vault() {
                </div>
 
                {/* Action buttons */}
-               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+               <div className="flex flex-wrap" style={{ alignItems: 'center', gap: '10px' }}>
                   {currentFolderId ? (
                      <>
                         <button
                            onClick={() => { setFolderStack((prev) => prev.slice(0, -1)); setSearchQuery(''); }}
                            className="flex items-center border border-border text-text-muted hover:border-primary/40 hover:text-primary uppercase font-semibold rounded-lg transition-all"
-                           style={{ gap: '8px', padding: '12px 20px', fontSize: '13px' }}
+                           style={{ gap: '6px', padding: '10px 14px', fontSize: '12px' }}
                         >
                            <ArrowLeft className="w-4 h-4" /> Back
                         </button>
                         <button
                            onClick={() => { setShowNewFolderInput(true); setNewFolderName(''); }}
                            className="flex items-center border border-border text-text-muted hover:border-primary/40 hover:text-primary uppercase font-semibold rounded-lg transition-all"
-                           style={{ gap: '8px', padding: '12px 20px', fontSize: '13px' }}
+                           style={{ gap: '6px', padding: '10px 14px', fontSize: '12px' }}
                         >
-                           <Plus className="w-4 h-4" /> New Subfolder
+                           <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New</span> Subfolder
                         </button>
                         <input
                            type="file"
@@ -264,10 +264,10 @@ export function Vault() {
                            onClick={() => fileInputRef.current?.click()}
                            disabled={isUploading}
                            className="flex items-center bg-primary text-white uppercase font-semibold rounded-lg transition-all hover:shadow-[0_4px_16px_-4px_rgba(27,111,99,0.3)] hover:-translate-y-0.5 disabled:opacity-50"
-                           style={{ gap: '10px', padding: '14px 24px', fontSize: '14px' }}
+                           style={{ gap: '8px', padding: '10px 18px', fontSize: '13px' }}
                         >
                            <Upload className="w-5 h-5" />
-                           {isUploading ? 'Uploading...' : 'Upload File'}
+                           {isUploading ? 'Uploading...' : <><span className="hidden sm:inline">Upload</span> File</>}
                         </button>
                      </>
                   ) : (
@@ -283,7 +283,7 @@ export function Vault() {
             </header>
 
             {/* ── MAIN RECORDS CONTAINER ── */}
-            <div className="vault-records-container bg-surface border border-border rounded-[32px] shadow-layered min-h-[70vh]" style={{ padding: '40px 48px' }}>
+            <div className="vault-records-container bg-surface border border-border rounded-2xl md:rounded-[32px] shadow-layered min-h-[70vh]" style={{ padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 48px)' }}>
 
                {/* New-folder / new-subfolder inline input (shown at any level) */}
                {showNewFolderInput && (
@@ -446,7 +446,7 @@ export function Vault() {
                {currentFolderId && (
                   <>
                      {/* Search */}
-                     <div className="relative w-full" style={{ maxWidth: '320px', marginBottom: '40px' }}>
+                     <div className="relative w-full" style={{ maxWidth: '320px', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
                         <input
                            type="text"
@@ -487,9 +487,9 @@ export function Vault() {
                               <div
                                  key={record._id}
                                  className="group grid grid-cols-1 md:grid-cols-12 items-center bg-bg/40 border border-border/40 rounded-2xl hover:bg-bg hover:border-primary/15 transition-all cursor-pointer"
-                                 style={{ padding: '18px 24px' }}
+                                 style={{ padding: 'clamp(14px, 2vw, 18px) clamp(14px, 2vw, 24px)' }}
                               >
-                                 <div className="col-span-4 flex items-center mb-3 md:mb-0" style={{ gap: '16px' }}>
+                                 <div className="col-span-4 flex items-center mb-3 md:mb-0" style={{ gap: '12px' }}>
                                     <div
                                        className="rounded-xl bg-surface border border-border/60 flex items-center justify-center text-primary group-hover:scale-105 transition-transform"
                                        style={{ width: '48px', height: '48px' }}
@@ -554,7 +554,7 @@ export function Vault() {
                                     )}
                                  </div>
 
-                                 <div className="col-span-2 flex items-center justify-end" style={{ gap: '6px' }}>
+                                 <div className="col-span-2 flex items-center justify-start md:justify-end flex-wrap" style={{ gap: '4px' }}>
                                     <button
                                        onClick={(e) => { e.stopPropagation(); setShareRecord(record); }}
                                        className="text-text-muted hover:text-primary hover:bg-primary/5 rounded-lg transition-all flex items-center"
@@ -630,20 +630,20 @@ export function Profile() {
    });
 
    return (
-      <div className="min-h-screen bg-bg pt-16 flex">
+      <div className="min-h-screen bg-bg pt-16 pb-20 md:pb-0 flex">
          <Sidebar />
-         <main className="flex-1 ml-16 animate-entrance" style={{ padding: '40px 48px' }}>
-            <header className="flex flex-col" style={{ gap: '4px', marginBottom: '40px' }}>
-               <h1 className="font-serif text-text" style={{ fontSize: '30px' }}>Profile</h1>
+         <main className="flex-1 ml-0 md:ml-16 animate-entrance" style={{ padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 48px)' }}>
+            <header className="flex flex-col" style={{ gap: '4px', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
+               <h1 className="font-serif text-text" style={{ fontSize: 'clamp(22px, 4vw, 30px)' }}>Profile</h1>
                <p className="uppercase font-semibold mono text-text-muted tracking-widest" style={{ fontSize: '12px' }}>
                   Account Settings
                </p>
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: '40px' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-3" style={{ gap: 'clamp(24px, 4vw, 40px)' }}>
                {/* Profile Card */}
                <div className="lg:col-span-1">
-                  <div className="bg-surface border border-border rounded-[32px] shadow-layered text-center" style={{ padding: '40px 32px' }}>
+                  <div className="bg-surface border border-border rounded-2xl md:rounded-[32px] shadow-layered text-center" style={{ padding: 'clamp(24px, 4vw, 40px) clamp(20px, 3vw, 32px)' }}>
                      <div
                         className="mx-auto rounded-full bg-bg border-2 border-primary flex items-center justify-center relative"
                         style={{ width: '96px', height: '96px', marginBottom: '24px' }}
@@ -691,7 +691,7 @@ export function Profile() {
 
                {/* Settings Panel */}
                <div className="lg:col-span-2" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-                  <div className="bg-surface border border-border rounded-[32px] shadow-layered" style={{ padding: '40px' }}>
+                  <div className="bg-surface border border-border rounded-2xl md:rounded-[32px] shadow-layered" style={{ padding: 'clamp(24px, 4vw, 40px)' }}>
                      <h2 className="font-serif" style={{ fontSize: '24px', marginBottom: '28px' }}>Account Information</h2>
 
                      <form

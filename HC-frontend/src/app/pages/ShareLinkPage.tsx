@@ -63,7 +63,7 @@ function FileCard({ file }: { file: SharedFile }) {
                     <iframe
                         src={file.signedUrl}
                         title={file.fileName}
-                        style={{ width: '100%', height: '1100px', border: 'none', display: 'block', borderRadius: '0' }}
+                        style={{ width: '100%', height: '80vh', minHeight: '400px', border: 'none', display: 'block', borderRadius: '0' }}
                     />
                 </div>
             )}
@@ -247,7 +247,7 @@ export default function ShareLinkPage() {
                             className="border border-border/60 rounded-2xl bg-surface"
                             style={{ padding: '20px 24px', marginBottom: '24px' }}
                         >
-                            <div className="flex items-center justify-between" style={{ gap: '12px' }}>
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between" style={{ gap: '12px' }}>
                                 <div>
                                     <h1 className="font-serif text-text" style={{ fontSize: '20px' }}>
                                         {data.type === 'file'
@@ -291,7 +291,7 @@ export default function ShareLinkPage() {
                                         <iframe
                                             src={data.record.fileUrl}
                                             title={data.record.fileName}
-                                            style={{ width: '100%', height: '1100px', border: 'none', display: 'block' }}
+                                            style={{ width: '100%', height: '80vh', minHeight: '400px', border: 'none', display: 'block' }}
                                         />
                                     </div>
                                 ) : (

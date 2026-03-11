@@ -18,16 +18,16 @@ function cn(...inputs: ClassValue[]) {
 
 export function Dashboard() {
   return (
-    <div className="min-h-screen bg-bg pt-16 flex">
+    <div className="min-h-screen bg-bg pt-16 pb-20 md:pb-0 flex">
       <Sidebar />
-      <main className="flex-1 ml-16 animate-entrance" style={{ padding: '40px 48px' }}>
-        <header className="flex flex-col" style={{ gap: '4px', marginBottom: '40px' }}>
-          <h1 className="font-serif text-text" style={{ fontSize: '30px' }}>Patient Dashboard</h1>
+      <main className="flex-1 ml-0 md:ml-16 animate-entrance" style={{ padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 48px)' }}>
+        <header className="flex flex-col" style={{ gap: '4px', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
+          <h1 className="font-serif text-text" style={{ fontSize: 'clamp(22px, 4vw, 30px)' }}>Patient Dashboard</h1>
           <p className="uppercase font-semibold mono text-text-muted tracking-widest" style={{ fontSize: '12px' }}>
             HealthLocker Medical Vault
           </p>
         </header>
-        <div className="bg-surface border border-border rounded-[32px] shadow-layered min-h-[70vh]" style={{ padding: '40px 48px' }}>
+        <div className="bg-surface border border-border rounded-2xl md:rounded-[32px] shadow-layered min-h-[70vh]" style={{ padding: 'clamp(20px, 4vw, 40px) clamp(16px, 4vw, 48px)' }}>
           <PatientDashboard />
         </div>
       </main>
@@ -62,7 +62,7 @@ function PatientDashboard() {
       {/* Total Records Card */}
       <div
         className="bg-bg/60 border border-border/60 rounded-2xl hover:bg-bg transition-colors group"
-        style={{ padding: '32px 40px', display: 'flex', alignItems: 'center', gap: '24px' }}
+        style={{ padding: 'clamp(20px, 3vw, 32px) clamp(16px, 3vw, 40px)', display: 'flex', alignItems: 'center', gap: 'clamp(16px, 2vw, 24px)' }}
       >
         <div
           className="rounded-xl bg-surface border border-border/60 group-hover:border-primary/20 transition-colors text-primary flex items-center justify-center flex-shrink-0"
@@ -111,10 +111,10 @@ function PatientDashboard() {
             records.slice(0, 5).map((record, idx) => (
               <div
                 key={idx}
-                className="group flex items-center justify-between bg-bg/50 border border-border/50 rounded-2xl hover:bg-bg hover:border-primary/15 transition-all"
-                style={{ padding: '18px 20px' }}
+                className="group flex flex-col sm:flex-row sm:items-center sm:justify-between bg-bg/50 border border-border/50 rounded-2xl hover:bg-bg hover:border-primary/15 transition-all"
+                style={{ padding: 'clamp(14px, 2vw, 18px) clamp(14px, 2vw, 20px)' }}
               >
-                <div className="flex items-center" style={{ gap: '16px' }}>
+                <div className="flex items-center" style={{ gap: '16px', minWidth: 0 }}>
                   <div
                     className="rounded-xl bg-surface border border-border/60 flex items-center justify-center text-primary flex-shrink-0"
                     style={{ width: '44px', height: '44px' }}
@@ -130,7 +130,7 @@ function PatientDashboard() {
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center flex-shrink-0" style={{ gap: '4px' }}>
+                <div className="flex items-center flex-shrink-0 mt-2 sm:mt-0 ml-[60px] sm:ml-0" style={{ gap: '4px' }}>
                   <button
                     onClick={() => setPreviewRecord(record)}
                     className="flex items-center text-primary hover:bg-primary/5 rounded-lg transition-all mono font-semibold uppercase"

@@ -35,13 +35,13 @@ export function Navbar() {
 
   return (
     <nav
+      style={{ padding: isLanding ? '16px 20px' : '0 16px' }}
       className={cn(
         "z-50 transition-all duration-500",
         isLanding
-          ? "absolute top-0 left-0 right-0 bg-transparent border-none"
-          : "fixed top-0 left-0 right-0 bg-bg/85 backdrop-blur-md border-b border-border/60"
+          ? "absolute top-0 left-0 right-0 bg-transparent border-none md:px-[60px] md:py-[24px]"
+          : "fixed top-0 left-0 right-0 bg-bg/85 backdrop-blur-md border-b border-border/60 md:px-[32px] md:pr-[32px]"
       )}
-      style={{ padding: isLanding ? '24px 60px' : '0 32px 0 16px' }}
     >
       <div
         className={cn(
@@ -160,40 +160,75 @@ export function Sidebar() {
   const navItems = allNavItems;
 
   return (
-    <aside
-      className="fixed left-0 bottom-0 bg-surface/20 border-r border-border/60 flex flex-col items-center"
-      style={{ top: '64px', width: '64px', padding: '32px 0', gap: '20px' }}
-    >
-      {navItems.map((item) => {
-        const isActive = location.pathname === item.href;
-        return (
-          <Link
-            key={item.href}
-            to={item.href}
-            className={cn(
-              "rounded-xl transition-all relative group",
-              isActive
-                ? "text-primary bg-primary/8"
-                : "text-text-muted hover:text-primary hover:bg-primary/4"
-            )}
-            style={{ padding: '12px' }}
-          >
-            <item.icon className="w-5 h-5" />
-            {isActive && (
-              <div
-                className="absolute top-1/2 -translate-y-1/2 bg-primary rounded-l-full"
-                style={{ right: 0, width: '3px', height: '22px' }}
-              />
-            )}
-            <div
-              className="absolute bg-text text-white uppercase rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap mono z-50"
-              style={{ left: '64px', fontSize: '11px', padding: '6px 10px' }}
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className="fixed left-0 bottom-0 bg-surface/20 border-r border-border/60 hidden md:flex flex-col items-center"
+        style={{ top: '64px', width: '64px', padding: '32px 0', gap: '20px' }}
+      >
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={cn(
+                "rounded-xl transition-all relative group",
+                isActive
+                  ? "text-primary bg-primary/8"
+                  : "text-text-muted hover:text-primary hover:bg-primary/4"
+              )}
+              style={{ padding: '12px' }}
             >
-              {item.label}
-            </div>
-          </Link>
-        );
-      })}
-    </aside>
+              <item.icon className="w-5 h-5" />
+              {isActive && (
+                <div
+                  className="absolute top-1/2 -translate-y-1/2 bg-primary rounded-l-full"
+                  style={{ right: 0, width: '3px', height: '22px' }}
+                />
+              )}
+              <div
+                className="absolute bg-text text-white uppercase rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap mono z-50"
+                style={{ left: '64px', fontSize: '11px', padding: '6px 10px' }}
+              >
+                {item.label}
+              </div>
+            </Link>
+          );
+        })}
+      </aside>
+
+      {/* Mobile bottom navigation */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border/60 flex md:hidden items-center justify-around"
+        style={{ padding: '8px 0 env(safe-area-inset-bottom, 8px) 0', height: '64px' }}
+      >
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              to={item.href}
+              className={cn(
+                "flex flex-col items-center justify-center transition-all",
+                isActive ? "text-primary" : "text-text-muted"
+              )}
+              style={{ gap: '4px', padding: '4px 16px' }}
+            >
+              <item.icon className="w-5 h-5" />
+              <span className="mono font-semibold uppercase" style={{ fontSize: '9px', letterSpacing: '0.06em' }}>
+                {item.label}
+              </span>
+              {isActive && (
+                <div
+                  className="absolute top-0 bg-primary rounded-b-full"
+                  style={{ width: '24px', height: '3px' }}
+                />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+    </>
   );
 }

@@ -191,8 +191,8 @@ export function LandingPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '12px',
-                padding: '22px 52px',
-                fontSize: '15px',
+                padding: 'clamp(16px, 3vw, 22px) clamp(32px, 6vw, 52px)',
+                fontSize: 'clamp(13px, 2vw, 15px)',
                 fontWeight: 600,
                 fontFamily: "'DM Sans', sans-serif",
                 textTransform: 'uppercase' as const,
@@ -242,11 +242,11 @@ export function LandingPage() {
               style={{
                 position: 'relative',
                 zIndex: 101,
-                width: 'calc(100% - 40px)',
+                width: 'calc(100% - 32px)',
                 maxWidth: '460px',
                 margin: 'auto',
                 flexShrink: 0,
-                padding: '48px 40px',
+                padding: 'clamp(28px, 5vw, 48px) clamp(20px, 4vw, 40px)',
                 background: 'rgba(255, 255, 255, 0.12)',
                 backdropFilter: 'blur(24px)',
                 WebkitBackdropFilter: 'blur(24px)',
@@ -280,7 +280,7 @@ export function LandingPage() {
                 <h2
                   className="font-serif"
                   style={{
-                    fontSize: '38px',
+                    fontSize: 'clamp(28px, 5vw, 38px)',
                     lineHeight: 1.1,
                     letterSpacing: '-0.02em',
                     fontWeight: 700,

@@ -339,28 +339,28 @@ export default function FilePreviewModal({ fileUrl, title, onClose, fileId, fold
         onClick={onClose}
       >
         <div
-          className="bg-bg border border-border/60 rounded-2xl shadow-xl flex flex-col overflow-hidden"
-          style={{ width: '90vw', maxWidth: '900px', height: '85vh' }}
+          className="bg-bg border border-border/60 rounded-none sm:rounded-2xl shadow-xl flex flex-col overflow-hidden"
+          style={{ width: '100vw', maxWidth: '900px', height: '100vh', maxHeight: '100vh' }}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header */}
           <div
             className="flex items-center justify-between border-b border-border/60"
-            style={{ padding: '16px 20px' }}
+            style={{ padding: '12px 16px' }}
           >
             <h3
               className="font-serif text-text truncate"
-              style={{ fontSize: '18px', maxWidth: '50%' }}
+              style={{ fontSize: 'clamp(14px, 3vw, 18px)', maxWidth: '40%' }}
             >
               {title || 'File Preview'}
             </h3>
-            <div className="flex items-center" style={{ gap: '8px' }}>
+            <div className="flex items-center flex-wrap justify-end" style={{ gap: '4px' }}>
               <a
                 href={fullUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center text-text-muted hover:text-primary hover:bg-primary/5 rounded-lg transition-all mono font-semibold uppercase"
-                style={{ padding: '6px 12px', fontSize: '11px', gap: '6px' }}
+                style={{ padding: '6px 8px', fontSize: '11px', gap: '4px' }}
                 title="Open in new tab"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -368,19 +368,19 @@ export default function FilePreviewModal({ fileUrl, title, onClose, fileId, fold
               <button
                 onClick={() => downloadFile(fileUrl, title)}
                 className="flex items-center text-text-muted hover:text-secondary hover:bg-secondary/5 rounded-lg transition-all mono font-semibold uppercase"
-                style={{ padding: '6px 12px', fontSize: '11px', gap: '6px' }}
+                style={{ padding: '6px 8px', fontSize: '11px', gap: '4px' }}
                 title="Download"
               >
-                <Download className="w-4 h-4" /> Download
+                <Download className="w-4 h-4" /> <span className="hidden sm:inline">Download</span>
               </button>
               {canShare && (
                 <button
                   onClick={() => setShowShareModal(true)}
                   className="flex items-center text-text-muted hover:text-primary hover:bg-primary/5 rounded-lg transition-all mono font-semibold uppercase"
-                  style={{ padding: '6px 12px', fontSize: '11px', gap: '6px' }}
+                  style={{ padding: '6px 8px', fontSize: '11px', gap: '4px' }}
                   title="Share"
                 >
-                  <Share2 className="w-4 h-4" /> Share
+                  <Share2 className="w-4 h-4" /> <span className="hidden sm:inline">Share</span>
                 </button>
               )}
               <button

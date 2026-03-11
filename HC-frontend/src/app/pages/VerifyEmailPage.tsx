@@ -69,7 +69,7 @@ export function VerifyEmailPage() {
           maxWidth: "480px",
           background: "#E9EFEA",
           borderRadius: "28px",
-          padding: "56px 48px",
+          padding: "clamp(32px, 5vw, 56px) clamp(24px, 4vw, 48px)",
           boxShadow: "0px 25px 50px rgba(0,0,0,0.05)",
           textAlign: "center",
         }}

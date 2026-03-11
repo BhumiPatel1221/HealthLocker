@@ -41,9 +41,16 @@ const corsOrigin = (origin, callback) => {
     // Allow non-browser clients (curl/postman) or same-origin
     if (!origin) return callback(null, true);
 
+    // Support comma-separated origins; trim whitespace and trailing slashes
     const configuredOrigin = process.env.CORS_ORIGIN;
     if (configuredOrigin) {
-        return callback(null, origin === configuredOrigin);
+        const allowedOrigins = configuredOrigin
+            .split(',')
+            .map(o => o.trim().replace(/\/+$/, ''));
+        const normalizedOrigin = origin.replace(/\/+$/, '');
+        if (allowedOrigins.includes(normalizedOrigin)) {
+            return callback(null, true);
+        }
     }
 
     // Dev convenience: Vite may auto-pick another port if 5173 is taken
