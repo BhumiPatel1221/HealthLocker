@@ -1,0 +1,8 @@
+/* 
+ * Typography System — HealthLocker
+ * Fonts are loaded via <link> in index.html to avoid @import ordering issues.
+ *
+ * Headings: Playfair Display (editorial serif)
+ * Body:     DM Sans (geometric grotesk)
+ * Metadata: IBM Plex Mono (institutional monospace)
+ */
