@@ -47,6 +47,17 @@
 }
 
 /* ─── Base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   font-family: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
   color: var(--color-text);
@@ -59,6 +70,28 @@ body {
   letter-spacing: -0.005em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ─── Responsive media defaults ─── */
+img,
+video,
+iframe,
+svg,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    min-height: 44px;
+  }
 }
 
 /* ─── Typography — Larger, editorial scale ─── */
@@ -352,4 +385,40 @@ body::after {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* ─── Mobile-first responsive helpers ─── */
+@media screen and (max-width: 767px) {
+  /* Prevent any horizontal overflow globally */
+  html, body, #root {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Scale down large headings */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+
+  /* Ensure tables don't overflow */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Prevent fixed-width iframes from overflowing */
+  iframe {
+    max-width: 100% !important;
+  }
+}
+
+/* ─── Small phone (320px) safeguards ─── */
+@media screen and (max-width: 360px) {
+  h1 { font-size: 1.625rem; }
+  h2 { font-size: 1.375rem; }
+
+  .mono {
+    font-size: 0.75em;
+  }
 }

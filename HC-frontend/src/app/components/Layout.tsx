@@ -127,20 +127,36 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
               className={cn(
                 "font-medium uppercase",
-                isLanding ? "text-white/80" : "text-text-muted"
+                isLanding ? "text-white/80" : (location.pathname === item.href ? "text-primary" : "text-text-muted")
               )}
               style={{ fontSize: '16px' }}
             >
               {item.label}
             </Link>
           ))}
-          <Link
-            to="/auth"
-            className="bg-primary text-white rounded-lg text-center font-semibold uppercase"
-            style={{ padding: '14px', fontSize: '15px' }}
-          >
-            Enter Vault
-          </Link>
+          {!isLanding && user && (
+            <Link
+              to="/profile"
+              onClick={() => setIsOpen(false)}
+              className={cn(
+                "font-medium uppercase",
+                location.pathname === "/profile" ? "text-primary" : "text-text-muted"
+              )}
+              style={{ fontSize: '16px' }}
+            >
+              Profile
+            </Link>
+          )}
+          {isLanding && (
+            <Link
+              to="/auth"
+              onClick={() => setIsOpen(false)}
+              className="bg-primary text-white rounded-lg text-center font-semibold uppercase"
+              style={{ padding: '14px', fontSize: '15px' }}
+            >
+              Enter Vault
+            </Link>
+          )}
         </div>
       )}
     </nav>

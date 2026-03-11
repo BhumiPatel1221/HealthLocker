@@ -288,11 +288,11 @@ export function Vault() {
                {/* New-folder / new-subfolder inline input (shown at any level) */}
                {showNewFolderInput && (
                   <div
-                     className="flex items-center bg-bg/60 border border-primary/30 rounded-2xl"
-                     style={{ padding: '20px 24px', marginBottom: '24px', gap: '12px' }}
+                     className="flex flex-wrap sm:flex-nowrap items-center bg-bg/60 border border-primary/30 rounded-2xl"
+                     style={{ padding: 'clamp(14px, 3vw, 20px) clamp(14px, 3vw, 24px)', marginBottom: '24px', gap: '10px' }}
                   >
                      <div
-                        className="rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0"
+                        className="rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 hidden sm:flex"
                         style={{ width: '48px', height: '48px' }}
                      >
                         <Folder className="w-6 h-6 text-primary" />
@@ -304,24 +304,26 @@ export function Vault() {
                         value={newFolderName}
                         onChange={(e) => setNewFolderName(e.target.value)}
                         onKeyDown={(e) => { if (e.key === 'Enter') handleCreateFolder(); if (e.key === 'Escape') setShowNewFolderInput(false); }}
-                        className="flex-1 bg-transparent outline-none text-text"
+                        className="flex-1 bg-transparent outline-none text-text min-w-0"
                         style={{ fontSize: '15px', fontWeight: 500 }}
                      />
-                     <button
-                        onClick={handleCreateFolder}
-                        disabled={isCreatingFolder || !newFolderName.trim()}
-                        className="bg-primary text-white uppercase mono font-bold rounded-lg disabled:opacity-50 transition-all"
-                        style={{ padding: '8px 18px', fontSize: '12px' }}
-                     >
-                        {isCreatingFolder ? 'Creating…' : 'Create'}
-                     </button>
-                     <button
-                        onClick={() => setShowNewFolderInput(false)}
-                        className="text-text-muted hover:text-text rounded-lg transition-colors"
-                        style={{ padding: '8px' }}
-                     >
-                        <X className="w-4 h-4" />
-                     </button>
+                     <div className="flex items-center" style={{ gap: '8px' }}>
+                        <button
+                           onClick={handleCreateFolder}
+                           disabled={isCreatingFolder || !newFolderName.trim()}
+                           className="bg-primary text-white uppercase mono font-bold rounded-lg disabled:opacity-50 transition-all"
+                           style={{ padding: '8px 18px', fontSize: '12px' }}
+                        >
+                           {isCreatingFolder ? 'Creating…' : 'Create'}
+                        </button>
+                        <button
+                           onClick={() => setShowNewFolderInput(false)}
+                           className="text-text-muted hover:text-text rounded-lg transition-colors"
+                           style={{ padding: '8px' }}
+                        >
+                           <X className="w-4 h-4" />
+                        </button>
+                     </div>
                   </div>
                )}
 
@@ -402,7 +404,7 @@ export function Vault() {
                               {/* 3-dot menu */}
                               <button
                                  onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === folder._id ? null : folder._id); }}
-                                 className="absolute top-3 right-3 rounded-lg text-text-muted hover:text-text hover:bg-bg transition-all opacity-0 group-hover:opacity-100"
+                                 className="absolute top-3 right-3 rounded-lg text-text-muted hover:text-text hover:bg-bg transition-all opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                                  style={{ padding: '6px' }}
                               >
                                  <MoreVertical className="w-4 h-4" />
@@ -489,15 +491,15 @@ export function Vault() {
                                  className="group grid grid-cols-1 md:grid-cols-12 items-center bg-bg/40 border border-border/40 rounded-2xl hover:bg-bg hover:border-primary/15 transition-all cursor-pointer"
                                  style={{ padding: 'clamp(14px, 2vw, 18px) clamp(14px, 2vw, 24px)' }}
                               >
-                                 <div className="col-span-4 flex items-center mb-3 md:mb-0" style={{ gap: '12px' }}>
+                                 <div className="col-span-4 flex items-center mb-3 md:mb-0 min-w-0" style={{ gap: '12px' }}>
                                     <div
-                                       className="rounded-xl bg-surface border border-border/60 flex items-center justify-center text-primary group-hover:scale-105 transition-transform"
+                                       className="rounded-xl bg-surface border border-border/60 flex items-center justify-center text-primary group-hover:scale-105 transition-transform flex-shrink-0"
                                        style={{ width: '48px', height: '48px' }}
                                     >
                                        <FileText className="w-6 h-6" />
                                     </div>
-                                    <div>
-                                       <h4 className="font-semibold text-text group-hover:text-primary transition-colors" style={{ fontSize: '15px' }}>
+                                    <div className="min-w-0">
+                                       <h4 className="font-semibold text-text group-hover:text-primary transition-colors truncate" style={{ fontSize: '15px' }}>
                                           {record.description}
                                        </h4>
                                        <p className="uppercase mono text-text-muted" style={{ fontSize: '12px', marginTop: '2px' }}>
@@ -668,7 +670,7 @@ export function Profile() {
                            <span className="uppercase mono font-semibold text-text-muted" style={{ fontSize: '12px' }}>
                               Email
                            </span>
-                           <span style={{ fontSize: '15px' }}>{user?.email}</span>
+                           <span className="break-all" style={{ fontSize: '15px' }}>{user?.email}</span>
                         </div>
                         <div className="flex flex-col" style={{ gap: '2px' }}>
                            <span className="uppercase mono font-semibold text-text-muted" style={{ fontSize: '12px' }}>
