@@ -7,31 +7,7 @@ const {
 } = require('../controllers/recordController');
 const verifyJWT = require('../middleware/verifyJWT');
 const restrictTo = require('../middleware/restrictTo');
-const multer = require('multer');
-const path = require('path');
-
-// Multer storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-});
-
-const upload = multer({
-    storage,
-    fileFilter: (req, file, cb) => {
-        const allowedTypes = ['.pdf', '.jpg', '.jpeg', '.png'];
-        const ext = path.extname(file.originalname).toLowerCase();
-        if (allowedTypes.includes(ext)) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only PDF and images are allowed'));
-        }
-    }
-});
+const upload = require('../middleware/upload');
 
 router.use(verifyJWT);
 

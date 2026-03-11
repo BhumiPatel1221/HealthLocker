@@ -11,6 +11,9 @@ const medicalRecordSchema = new mongoose.Schema(
             type: String,
             required: [true, 'File URL is required'],
         },
+        s3Key: {
+            type: String,
+        },
         folder: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Folder',

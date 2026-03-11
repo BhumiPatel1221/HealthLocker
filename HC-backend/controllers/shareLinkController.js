@@ -159,10 +159,16 @@ const accessShareLink = catchAsync(async (req, res) => {
         const record = await MedicalRecord.findById(shareLink.recordId).lean();
         if (!record) throw new NotFoundError('The shared record no longer exists');
 
-        const backendBase = process.env.BACKEND_URL || 'http://localhost:5000';
-        const fileUrl = record.fileUrl.startsWith('http')
-            ? record.fileUrl
-            : `${backendBase}${record.fileUrl}`;
+        // Use signed URL if the record has an S3 key, otherwise fall back to stored URL
+        let fileUrl;
+        if (record.s3Key) {
+            fileUrl = await getSignedDownloadUrl(record.s3Key, 900);
+        } else {
+            const backendBase = process.env.BACKEND_URL || 'http://localhost:5000';
+            fileUrl = record.fileUrl.startsWith('http')
+                ? record.fileUrl
+                : `${backendBase}${record.fileUrl}`;
+        }
 
         responseData.record = {
             _id: record._id,

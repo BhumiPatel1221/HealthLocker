@@ -5,8 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { sendSuccess } = require('../utils/response');
 const { BadRequestError, NotFoundError, ForbiddenError } = require('../utils/AppError');
 const { createAuditLog } = require('../services/auditService');
-const fs = require('fs');
-const path = require('path');
+const { uploadToS3, deleteFromS3 } = require('../services/s3Service');
 
 
 // POST /api/records/upload
@@ -33,9 +32,19 @@ const uploadRecord = catchAsync(async (req, res) => {
     const fileType = mimeMap[req.file.mimetype] ||
         (req.file.mimetype.startsWith('image/') ? 'IMAGE' : 'FILE');
 
+    // Upload to S3
+    const s3Folder = `patients/${req.user.id}/records/${folder}`;
+    const { s3Key, s3Url } = await uploadToS3(
+        req.file.buffer,
+        req.file.originalname,
+        req.file.mimetype,
+        s3Folder
+    );
+
     const record = await MedicalRecord.create({
         patientId: req.user.id,
-        fileUrl: `/uploads/${req.file.filename}`,
+        fileUrl: s3Url,
+        s3Key,
         folder,
         description,
         fileType,
@@ -65,12 +74,13 @@ const deleteRecord = catchAsync(async (req, res) => {
         throw new ForbiddenError('You do not have permission to delete this record');
     }
 
-    // Remove physical file from disk
-    if (record.fileUrl) {
-        const filePath = path.join(__dirname, '..', record.fileUrl);
-        fs.unlink(filePath, (err) => {
-            if (err && err.code !== 'ENOENT') console.error('File delete error:', err);
-        });
+    // Remove file from S3
+    if (record.s3Key) {
+        try {
+            await deleteFromS3(record.s3Key);
+        } catch (err) {
+            console.error('S3 delete error:', err);
+        }
     }
 
     await record.deleteOne();
