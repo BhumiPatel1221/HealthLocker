@@ -26,23 +26,36 @@ export function getFileType(fileUrl: string): FileType {
 }
 
 /**
- * Programmatic file download that works cross-origin.
- * Fetches the file as a blob and triggers a browser download.
+ * Programmatic file download.
+ * For same-origin files, fetches as blob. For cross-origin (S3 signed URLs),
+ * opens in a new tab (browsers handle download from there).
  */
 export async function downloadFile(fileUrl: string, filename?: string): Promise<void> {
   try {
     const fullUrl = getFileUrl(fileUrl);
-    const res = await fetch(fullUrl);
-    if (!res.ok) throw new Error('Download failed');
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename || fileUrl.split('/').pop() || 'download';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const downloadName = filename || fileUrl.split('/').pop()?.split('?')[0] || 'download';
+
+    // For S3 / cross-origin URLs, try fetch with no-cors fallback
+    try {
+      const res = await fetch(fullUrl, { mode: 'cors' });
+      if (res.ok) {
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = downloadName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        return;
+      }
+    } catch {
+      // fetch failed (CORS), fall through to window.open
+    }
+
+    // Fallback: open in new tab — browser will render or download depending on Content-Type
+    window.open(fullUrl, '_blank');
   } catch (err) {
     console.error('Download error:', err);
   }

@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 const { sendSuccess } = require('../utils/response');
 const { BadRequestError, NotFoundError, ForbiddenError } = require('../utils/AppError');
 const { createAuditLog } = require('../services/auditService');
-const { uploadToS3, deleteFromS3 } = require('../services/s3Service');
+const { uploadToS3, getSignedDownloadUrl, deleteFromS3 } = require('../services/s3Service');
 
 
 // POST /api/records/upload
@@ -60,8 +60,23 @@ const getMyRecords = catchAsync(async (req, res) => {
     const { folder } = req.query;
     const filter = { patientId: req.user.id };
     if (folder) filter.folder = folder;
-    const records = await MedicalRecord.find(filter).sort('-createdAt');
-    sendSuccess(res, { records }, 'Records retrieved successfully');
+    const records = await MedicalRecord.find(filter).sort('-createdAt').lean();
+
+    // Generate signed URLs for S3-backed records so the browser can access them
+    const recordsWithUrls = await Promise.all(
+        records.map(async (record) => {
+            if (record.s3Key) {
+                try {
+                    record.fileUrl = await getSignedDownloadUrl(record.s3Key, 900);
+                } catch (err) {
+                    console.error('Signed URL error for record', record._id, err.message);
+                }
+            }
+            return record;
+        })
+    );
+
+    sendSuccess(res, { records: recordsWithUrls }, 'Records retrieved successfully');
 });
 
 // All doctor access logic removed
