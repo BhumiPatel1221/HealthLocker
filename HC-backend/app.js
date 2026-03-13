@@ -35,6 +35,8 @@ app.use(helmet({
 const devOriginAllowlist = new Set([
     'http://localhost:5173',
     'http://localhost:5174',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:5174',
 ]);
 
 const corsOrigin = (origin, callback) => {
@@ -56,14 +58,18 @@ const corsOrigin = (origin, callback) => {
     // Dev convenience: Vite may auto-pick another port if 5173 is taken
     if ((process.env.NODE_ENV || 'development') === 'development') {
         if (devOriginAllowlist.has(origin)) return callback(null, true);
-        if (/^http:\/\/localhost:\d+$/.test(origin)) return callback(null, true);
+        if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return callback(null, true);
     }
 
     return callback(null, false);
 };
 
+// If a CORS_ORIGIN env var is provided, use the strict origin checker.
+// Otherwise reflect the request origin (safer than outright wildcard) so
+// deployed frontends can reach the API when the env wasn't configured.
+const corsOriginOption = process.env.CORS_ORIGIN ? corsOrigin : true;
 app.use(cors({
-    origin: corsOrigin,
+    origin: corsOriginOption,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

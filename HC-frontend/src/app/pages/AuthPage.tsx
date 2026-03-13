@@ -42,8 +42,16 @@ export function AuthPage() {
         navigate("/dashboard");
       }
     } catch (err: any) {
-      const msg: string = err.response?.data?.message || 'Authentication failed';
-      toast.error(msg);
+      const apiMessage: string | undefined = err?.response?.data?.message;
+      const status: number | undefined = err?.response?.status;
+
+      if (!err?.response) {
+        toast.error('Unable to reach backend API. Start backend on port 5000 or set VITE_API_BASE_URL correctly.');
+      } else if (status === 401 && apiMessage?.toLowerCase().includes('verify your email')) {
+        toast.error('Please verify your email first, then sign in. Check inbox/spam for the verification link.');
+      } else {
+        toast.error(apiMessage || 'Authentication failed');
+      }
     } finally {
       setLoading(false);
     }

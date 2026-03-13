@@ -12,11 +12,12 @@ const { sendVerificationEmail } = require('../services/emailService');
  */
 const register = catchAsync(async (req, res) => {
     const { name, email, password, role, medicalRegistrationNumber, hospitalClinicName, mobile } = req.body;
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
     if (!name || typeof name !== 'string' || !name.trim()) {
         throw new BadRequestError('Name is required');
     }
-    if (!email || typeof email !== 'string' || !email.trim()) {
+    if (!normalizedEmail) {
         throw new BadRequestError('Email is required');
     }
     if (!password || typeof password !== 'string') {
@@ -42,14 +43,14 @@ const register = catchAsync(async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
         throw new BadRequestError('User already exists');
     }
 
     const userData = {
         name: name.trim(),
-        email: email.trim().toLowerCase(),
+        email: normalizedEmail,
         password,
         role: safeRole,
     };
@@ -116,13 +117,14 @@ const verifyEmail = catchAsync(async (req, res) => {
  */
 const login = catchAsync(async (req, res) => {
     const { email, password } = req.body;
+    const normalizedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
 
-    if (!email || !password) {
+    if (!normalizedEmail || !password) {
         throw new BadRequestError('Please provide email and password');
     }
 
     // Check user & password
-    const user = await User.findOne({ email }).select('+password');
+    const user = await User.findOne({ email: normalizedEmail }).select('+password');
     if (!user || !(await user.comparePassword(password))) {
         throw new UnauthorizedError('Invalid email or password');
     }
