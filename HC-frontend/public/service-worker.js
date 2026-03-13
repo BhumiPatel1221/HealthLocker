@@ -2,37 +2,26 @@
 // Provides offline support with cache-first strategy for static assets
 // IMPORTANT: Never caches sensitive medical data or API auth responses
 
-const CACHE_NAME = 'healthlocker-cache-v1';
-const STATIC_CACHE_NAME = 'healthlocker-static-v1';
+const CACHE_NAME = 'healthlocker-cache-v2';
+const STATIC_CACHE_NAME = 'healthlocker-static-v2';
 
 // Static assets to pre-cache during install
 const PRECACHE_ASSETS = [
   '/',
-  '/index.html',
   '/manifest.json',
   '/icon-192x192.png',
   '/icon-512x512.png',
 ];
 
-// Routes to cache for offline navigation
-const CACHEABLE_ROUTES = [
-  '/',
-  '/auth',
-  '/dashboard',
-  '/vault',
-  '/profile',
-];
-
 // Patterns for resources that should NEVER be cached (security)
+// These apply to the URL pathname only — not the full href
 const NEVER_CACHE_PATTERNS = [
   /\/api\//,                    // All API responses
-  /\/auth\//,                   // Auth endpoints
+  /\/api$/,                     // API root
+  /\/api\/auth/,                // Auth API endpoints specifically
   /\/medical-records/,          // Medical record data
-  /\/records/,                  // Record endpoints
-  /\/share\//,                  // Shared medical data
   /\/uploads\//,                // Uploaded medical files
   /\/download/,                 // Downloaded records
-  /token/i,                     // Anything with token
   /\.env/,                      // Environment variables
 ];
 
@@ -100,8 +89,8 @@ self.addEventListener('activate', (event) => {
 });
 
 // ─── HELPER: Check if a URL should never be cached ─────────────────────────────
-function shouldNeverCache(url) {
-  return NEVER_CACHE_PATTERNS.some((pattern) => pattern.test(url));
+function shouldNeverCache(requestUrl) {
+  return NEVER_CACHE_PATTERNS.some((pattern) => pattern.test(requestUrl.pathname));
 }
 
 // ─── HELPER: Check if a request is for a static asset ──────────────────────────
@@ -129,7 +118,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // NEVER cache sensitive data — pass through to network
-  if (shouldNeverCache(requestUrl.href)) {
+  if (shouldNeverCache(requestUrl)) {
     return;
   }
 
