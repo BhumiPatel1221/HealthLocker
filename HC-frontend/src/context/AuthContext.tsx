@@ -21,7 +21,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(() => {
+        const cachedUser = localStorage.getItem('user');
+        return cachedUser ? JSON.parse(cachedUser) : null;
+    });
     const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
     const [loading, setLoading] = useState(true);
 
@@ -31,9 +34,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 try {
                     const res = await api.get('/auth/me');
                     setUser(res.data.data.user);
-                } catch (err) {
+                    localStorage.setItem('user', JSON.stringify(res.data.data.user));
+                } catch (err: any) {
                     console.error('Failed to load user', err);
-                    logout();
+                    // If offline or network error, don't logout. 
+                    // Only logout if the server explicitly rejects the token (401/403).
+                    if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+                        logout();
+                    }
                 }
             }
             setLoading(false);
@@ -45,6 +53,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const res = await api.post('/auth/login', { email, password });
         const { token, user } = res.data.data;
         localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(user));
         setToken(token);
         setUser(user);
     };
@@ -61,6 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setToken(null);
         setUser(null);
     };
