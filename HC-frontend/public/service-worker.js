@@ -2,8 +2,8 @@
 // Provides offline support with cache-first strategy for static assets
 // IMPORTANT: Never caches sensitive medical data or API auth responses
 
-const CACHE_NAME = 'healthlocker-cache-v3';
-const STATIC_CACHE_NAME = 'healthlocker-static-v3';
+const CACHE_NAME = 'healthlocker-cache-v4';
+const STATIC_CACHE_NAME = 'healthlocker-static-v4';
 
 // Static assets to pre-cache during install
 const PRECACHE_ASSETS = [
@@ -184,12 +184,13 @@ async function networkFirstForNavigation(request) {
     return networkResponse;
   } catch (error) {
     console.log('[ServiceWorker] Network failed, serving from cache');
-    const cachedResponse = await caches.match(request);
+    // For SPA routing, ANY navigation request should fall back to index.html (which is '/')
+    const cachedResponse = await caches.match('/');
     if (cachedResponse) {
       return cachedResponse;
     }
-    // Fallback to cached index.html for SPA routing
-    return caches.match('/') || new Response(getOfflineFallbackHTML(), {
+    // Deep fallback to offline UI if even '/' is missing
+    return new Response(getOfflineFallbackHTML(), {
       headers: { 'Content-Type': 'text/html' },
     });
   }
