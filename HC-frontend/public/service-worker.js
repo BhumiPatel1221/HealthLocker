@@ -2,8 +2,8 @@
 // Provides offline support with cache-first strategy for static assets
 // IMPORTANT: Never caches sensitive medical data or API auth responses
 
-const CACHE_NAME = 'healthlocker-cache-v2';
-const STATIC_CACHE_NAME = 'healthlocker-static-v2';
+const CACHE_NAME = 'healthlocker-cache-v3';
+const STATIC_CACHE_NAME = 'healthlocker-static-v3';
 
 // Static assets to pre-cache during install
 const PRECACHE_ASSETS = [

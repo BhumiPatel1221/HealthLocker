@@ -2,15 +2,23 @@ import axios from 'axios';
 
 // Use VITE_API_BASE_URL if set, otherwise auto-detect dev/prod
 const getBaseURL = () => {
+    let url = 'https://healthlocker-backend.onrender.com/api';
+
     if (import.meta.env.VITE_API_BASE_URL) {
-        return import.meta.env.VITE_API_BASE_URL;
+        url = import.meta.env.VITE_API_BASE_URL;
+    } else if (import.meta.env.DEV) {
+        url = 'http://localhost:5000/api';
     }
-    // Vite sets import.meta.env.DEV to true during `npm run dev`
-    if (import.meta.env.DEV) {
-        return 'http://localhost:5000/api';
+
+    // Ensure the url ends with '/api' to fix missing api contexts from Env vars
+    url = url.replace(/\/+$/, '');
+    if (!url.endsWith('/api')) {
+        url = `${url}/api`;
     }
-    return 'https://healthlocker-backend.onrender.com/api';
+
+    return url;
 };
+
 
 const api = axios.create({
     baseURL: getBaseURL(),
